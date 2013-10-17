@@ -8,26 +8,112 @@ window.SwfController = {
     game: function() {
         steroids.view.navigationBar.show("Game");
         
-        $(document).ready(function(){
-            
+        
+        steroids.on('ready', function() {
+            console.log('steroids app path = ' + steroids.app.path); // on iOS ~= "applications/local/123456789"
+        
+
             // Disable user scrolling
             document.addEventListener("touchmove", function(e) { e.preventDefault(); });
             
-            // Prime audio system for instant playback
-            steroids.audio.prime();
+            document.addEventListener("deviceready",onDeviceReady,false);
             
+                // Should return /www root
+                function getSteroidsAbsPath() {
+                    return "file://" + steroids.app.absolutePath;            
+                }
                 
-            $(document).on('touchstart', '.sequence-container .button', function() {
-                var soundPath = 'sounds/sequence/' + $(this).attr('data-sound');
-                steroids.audio.play(soundPath);
-                $(this).addClass("active");
-            });
-            
-            $(document).on('touchend', '.sequence-container .button', function() {
-                $(this).removeClass('active');
-            });
+                
+                function getSteroidsAppPath() {
+                    return steroids.app.path;            
+                }
+                
+                
+                function getSoundPath() {
+                    return '/sounds/sequence/';
+                }
+                
+                
+                function getInternetSoundsPath() {
+                    return window.location.origin + "/sounds/sequence/";
+                }
+                
+                
+                function assignColorsToSounds(fullSoundPath) {
+                    var colors = [
+                        'green', 
+                        'yellow',
+                        'blue',  
+                        'red'   
+                    ];
+                    
+                    
+                    colors['green'] = new Media(fullSoundPath + 'green.wav',
+                        function(){  },
+                        function(e){ var str = JSON.stringify(e, undefined, 2); console.log(str);
+                    });
+                    
+                    colors['yellow'] = new Media(fullSoundPath + 'yellow.wav',
+                        function(){  },
+                        function(e){ var str = JSON.stringify(e, undefined, 2); console.log(str);
+                    });
 
+                    colors['blue'] = new Media(fullSoundPath + 'blue.wav',
+                        function(){  },
+                        function(e){ var str = JSON.stringify(e, undefined, 2); console.log(str);
+                    });
+
+                    colors['red'] = new Media(fullSoundPath + 'red.wav',
+                        function(){  },
+                        function(e){ var str = JSON.stringify(e, undefined, 2); console.log(str);
+                    });
+                    
+                    return colors;
+                }
             
+            
+                function onDeviceReady () {
+                                
+                    var soundPath          = getSoundPath();
+                    var steroidsPath       = getSteroidsAbsPath();
+                    var fullSoundPath      = steroidsPath + soundPath;
+                    var testPath           = getSteroidsAppPath() + soundPath;
+                    
+                    // Using window.location.origin
+                    var internetSoundsPath = getInternetSoundsPath();
+                    
+                    //console.log(JSON.stringify(window.location, undefined, 2));
+                    
+                    //var colors = assignColorsToSounds(fullSoundPath);
+                    var colors = assignColorsToSounds(internetSoundsPath);
+                    
+                    /* 
+                    test = new Media(internetSoundsPath + 'green.wav',
+                        function(){ console.log('success'); },
+                        function(e){ var str = JSON.stringify(e, undefined, 2); console.log(str);
+                    });
+                    
+                    test.play();
+                    */
+                    
+                    $(document).on('touchstart', '.sequence-container .button', function() {
+                        var sound = $(this).attr('id');
+                        colors[sound].play();
+                        $(this).addClass("active");
+                    });
+                    
+                    $(document).on('touchend', '.sequence-container .button', function() {
+                        var sound = $(this).attr('id');
+                        colors[sound].stop();
+                        $(this).removeClass('active');
+                    });
+            
+                }
+        }); // End steroids ready
+
+        $(document).ready(function(){
+            
+                        
         });
     },
     

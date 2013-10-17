@@ -1,7 +1,8 @@
 window.SwfController = {
 
   index: function () {
-    steroids.view.navigationBar.show("Index of swf");
+    steroids.view.navigationBar.show("Sequence");
+    
   },
 
   show: function () {

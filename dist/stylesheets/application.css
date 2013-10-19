@@ -8,12 +8,36 @@ input {
 }
 
 .content-padded {
-    padding: 10px;
+    /*padding: 10px;*/
+}
+
+#green {
+    background-color:green;
+}
+#red {
+    background-color:red;
+}
+#yellow {
+    background-color:yellow;
+}
+#blue {
+    background-color:blue;
+}
+
+.button {
+    color:#fff;
+    opacity:0.65;
+}
+
+.button.active {
+    opacity:0.85;
 }
 
 
-html, body, .sequence-container {
-    height:400px;
+html, body, 
+.sequence-container, 
+.content-padded {
+    height:100%;
     width:100%;
 }
 
@@ -23,8 +47,7 @@ html, body, .sequence-container {
     -webkit-box-sizing: border-box;
     float:left;
     overflow-hidden;
-    border: 1px solid #9DA2A4;
-    
+    border: 1px solid #9DA2A4;    
     display: -webkit-box;
     -webkit-box-align: center;
     -webkit-box-pack: center;

@@ -77,7 +77,7 @@ window.SwfController = {
                     return new Media("file://" + steroids.app.absolutePath + relSoundPath,
                         // Success
                         function() {  
-                            console.log("playing sound from path : " + absSoundPath);
+                            //console.log("playing sound from path : " + absSoundPath);
                         },
                         // Error
                         function(e) { 
@@ -120,10 +120,8 @@ window.SwfController = {
                         
                         var sound = $(this).attr('id');
                         colors[sound].play();
-                        
-                        $(this).addClass("active");
-                        //TEST.play();
 
+                        $(this).addClass("active");                        
                     });
                     
                     $(document).on('touchend', '.sequence-container .button', function() {

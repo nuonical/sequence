@@ -24,6 +24,12 @@ window.SwfController = {
             
             document.addEventListener("deviceready",onDeviceReady,false);
             
+                // Helper console log method
+                function logJson(e) {
+                    var str = JSON.stringify(e, undefined, 2);
+                    console.log(str);
+                }
+            
                 // Should return /www root
                 function getSteroidsAbsPath() {
                     return "file://" + steroids.app.absolutePath;            

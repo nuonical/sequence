@@ -65,13 +65,13 @@ window.SwfController = {
                     }
                     
                     var soundsPath = getSoundPath();
-                    colors['green'] = createNewSoundObject(soundsPath + 'green.wav');
+                    colors['green'] = createNewSoundObject(soundsPath + 'green.wav', 'green');
                     
-                    colors['yellow'] = createNewSoundObject(soundsPath + 'yellow.wav');
+                    colors['yellow'] = createNewSoundObject(soundsPath + 'yellow.wav', 'yellow');
 
-                    colors['blue'] = createNewSoundObject(soundsPath + 'blue.wav');
+                    colors['blue'] = createNewSoundObject(soundsPath + 'blue.wav', 'blue');
 
-                    colors['red'] = createNewSoundObject(soundsPath + 'red.wav');
+                    colors['red'] = createNewSoundObject(soundsPath + 'red.wav', 'red');
                     
                     return colors;
                 }
@@ -79,22 +79,26 @@ window.SwfController = {
                 // Returns a Media Object with error messaging
                 // Can use .play() and other Meda functions
                 // *param 'relSoundPath' is the relative path to the sound file to play.
-                function createNewSoundObject(relSoundPath) {
-                    return new Media("file://" + steroids.app.absolutePath + relSoundPath,
-                        // Success
-                        function() {  
-                            //console.log("playing sound from path : " + absSoundPath);
-                        },
-                        // Error
-                        function(e) { 
-                            alert(relSoundPath);
-                            var str = JSON.stringify(e, undefined,  2); 
-                            console.log(str);
-                        }
-                    );
+                function createNewSoundObject(relSoundPath, assetName) {
+
+                    // Preload the audio asset for later use
+                    PGLowLatencyAudio.preloadAudio(assetName, relSoundPath, 1);
+                    /*
+                        return new Media("file://" + steroids.app.absolutePath + relSoundPath,
+                            // Success
+                            function() {  
+                                //console.log("playing sound from path : " + absSoundPath);
+                            },
+                            // Error
+                            function(e) { 
+                                alert(relSoundPath);
+                                var str = JSON.stringify(e, undefined,  2); 
+                                console.log(str);
+                            }
+                        );
+                    */
                 }
-            
-            
+
                 function onDeviceReady () {
                                 
                     
@@ -109,29 +113,46 @@ window.SwfController = {
                     //var colors = assignColorsToSounds(fullSoundPath);
                     var colors = assignColorsToSounds(internetSoundsPath);
 
-                    TEST = createNewSoundObject("file://" + steroids.app.absolutePath + '/sounds/sequence/green.wav');
+                    //TEST = createNewSoundObject("file://" + steroids.app.absolutePath + '/sounds/sequence/green.wav');
                     
                     $(document).on('touchstart', '.sequence-container .button', function() {
                         
+                        // Play the preloaded sound
                         var sound = $(this).attr('id');
-                        colors[sound].play();
-                        $(this).addClass("active");
+                        PGLowLatencyAudio.play(sound);
+
+                        //colors[sound].play();
                         
-                        // Add touchmove listener, check coords
-                        $('.sequence-container .button').on('touchmove', function(e){
-                            if($(this).hasClass('active')) {
-                                return;
-                            }
-                        });                        
+
+                        $(this).addClass("active");
+                                            
+                    });
+
+                    // Add touchmove listener, check coords
+                    $(document).on('touchmove', '.sequence-container .button', function(e) {
+                        // Don't play if already playing
+                        if($(this).hasClass('active')) {
+                            return;
+                        }
+
+                        // Check if moved over an item that isn't already playing
+                        var touch = e.originalEvent.touches[0];
+                        var $el = $(document.elementFromPoint(touch.clientX, touch.clientY));
+
+                        if(!$el.hassClass("active")) {
+                            $el.addClass("active");    
+                            var sound = $(this).attr('id');
+                            PGLowLatencyAudio.play(sound);
+                        }
                     });
                     
+                    // I think we may need to bind coordinates to stop playing here as well
                     $(document).on('touchend', '.sequence-container .button', function() {
                         var sound = $(this).attr('id');
-                        colors[sound].stop();
+                        //colors[sound].stop();
+                        PGLowLatencyAudio.stop(sound);
+
                         $(this).removeClass('active');
-                        
-                        // Turn off touchmove until another touchstart
-                        $('.sequence-container .button').off('touchmove');
                     });
             
                 }

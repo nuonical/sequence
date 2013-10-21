@@ -87,7 +87,7 @@ window.SwfController = {
                         },
                         // Error
                         function(e) { 
-                            alert(absSoundPath)
+                            alert(relSoundPath);
                             var str = JSON.stringify(e, undefined,  2); 
                             console.log(str);
                         }

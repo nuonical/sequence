@@ -100,19 +100,8 @@ window.SwfController = {
                     // Using window.location.origin
                     var internetSoundsPath = getInternetSoundsPath();
                     
-                    //console.log(JSON.stringify(window.location, undefined, 2));
-                    
                     //var colors = assignColorsToSounds(fullSoundPath);
                     var colors = assignColorsToSounds(internetSoundsPath);
-                    
-                    /* 
-                    test = new Media(internetSoundsPath + 'green.wav',
-                        function(){ console.log('success'); },
-                        function(e){ var str = JSON.stringify(e, undefined, 2); console.log(str);
-                    });
-                    
-                    test.play();
-                    */
 
                     TEST = createNewSoundObject("file://" + steroids.app.absolutePath + '/sounds/sequence/green.wav');
                     
@@ -120,8 +109,14 @@ window.SwfController = {
                         
                         var sound = $(this).attr('id');
                         colors[sound].play();
-
-                        $(this).addClass("active");                        
+                        $(this).addClass("active");
+                        
+                        // Add touchmove listener, check coords
+                        $('.sequence-container .button').on('touchmove', function(e){
+                            if($(this).hasClass('active')) {
+                                return;
+                            }
+                        });                        
                     });
                     
                     $(document).on('touchend', '.sequence-container .button', function() {

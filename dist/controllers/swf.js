@@ -129,6 +129,9 @@ window.SwfController = {
                         var sound = $(this).attr('id');
                         colors[sound].stop();
                         $(this).removeClass('active');
+                        
+                        // Turn off touchmove until another touchstart
+                        $('.sequence-container .button').off('touchmove');
                     });
             
                 }

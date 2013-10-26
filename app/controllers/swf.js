@@ -36,11 +36,29 @@ window.SwfController = {
                 function getSoundPath() {
                     return '/sounds/sequence/';
                 }
-                                
-                function getInternetSoundsPath() {
-                    return window.location.origin + "/sounds/sequence/";
-                }                
+                 
                 
+                // Return ios sounds path               
+                function getIosSoundsPath() {
+                    return window.location.origin + "/sounds/sequence/";
+                }
+                
+                // Return android sounds path
+                function getAndroidSoundsPath() {
+                    return "file://" + steroids.app.absolutePath + '/sounds/sequence/';
+                }
+                
+                // Device checking to grab correct file locations
+                function getSoundsPathByDevice() {
+                    var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
+                    if(iOS) {
+                        return getIosSoundsPath();
+                    } else {
+                        return getAndroidSoundsPath();
+                    }
+                }
+                     
+                // Setup buttons with colors / sounds
                 function assignColorsToSounds(fullSoundPath) {
 					BUTTONS = $(".button");
                     colors = [
@@ -50,7 +68,8 @@ window.SwfController = {
                         'red'   
                     ];                                       
                     
-                    var soundsPath = "file://" + steroids.app.absolutePath + '/sounds/sequence/';
+                    var soundsPath = getSoundsPathByDevice();
+                    
                     colors['green'] = createNewSoundObject(soundsPath + 'green.wav', 'green');
                     
                     colors['yellow'] = createNewSoundObject(soundsPath + 'yellow.wav', 'yellow');
@@ -123,16 +142,7 @@ window.SwfController = {
 
                 function onDeviceReady () {                            
                     
-                    var steroidsPath       = getSteroidsAbsPath();
-                    var soundPath          = getSoundPath();
-                    var fullSoundPath      = steroidsPath + soundPath;
-                    var testPath           = getSteroidsAppPath() + soundPath;
-                    
-                    // Using window.location.origin
-                    var internetSoundsPath = getInternetSoundsPath();
-                    
-                    //var colors = assignColorsToSounds(fullSoundPath);
-                    var colors = assignColorsToSounds(internetSoundsPath);                
+                    var colors = assignColorsToSounds();                
                     
                     $(document).on('touchstart', '.sequence-container .button', function(e) {
                         playBoxHovers(e);                                                                  

@@ -10,7 +10,7 @@ window.SwfController = {
         
         
         var startButton = new steroids.buttons.NavigationBarButton();
-        startButton.title = "Play";
+        startButton.title = "Play/Reset";
         
         startButton.onTap = function() {   
             // Build up the sequence to use
@@ -35,126 +35,6 @@ window.SwfController = {
             });
             
             document.addEventListener("deviceready",onDeviceReady,false);
-            
-                // Should return /www root
-                function getSteroidsAbsPath() {
-                    return "file://" + steroids.app.absolutePath;            
-                }
-                                
-                function getSteroidsAppPath() {
-                    return steroids.app.path;            
-                }
-                                
-                function getSoundPath() {
-                    return '/sounds/sequence/';
-                }
-                 
-                
-                // Return ios sounds path               
-                function getIosSoundsPath() {
-                    return window.location.origin + "/sounds/sequence/";
-                }
-                
-                // Return android sounds path
-                function getAndroidSoundsPath() {
-                    return "file://" + steroids.app.absolutePath + '/sounds/sequence/';
-                }
-                
-                // Device checking to grab correct file locations
-                function getSoundsPathByDevice() {
-                    var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
-                    if(iOS) {
-                        return getIosSoundsPath();
-                    } else {
-                        return getAndroidSoundsPath();
-                    }
-                }
-                     
-                // Setup buttons with colors / sounds
-                /*
-                function assignColorsToSounds(fullSoundPath) {
-					BUTTONS = $(".button");
-                    colors = [
-                        'green', 
-                        'yellow',
-                        'blue',  
-                        'red'   
-                    ];                                       
-                    
-                    var soundsPath = getSoundsPathByDevice();
-                    
-                    colors['green'] = createNewSoundObject(soundsPath + 'green.wav', 'green');
-                    
-                    colors['yellow'] = createNewSoundObject(soundsPath + 'yellow.wav', 'yellow');
-
-                    colors['blue'] = createNewSoundObject(soundsPath + 'blue.wav', 'blue');
-
-                    colors['red'] = createNewSoundObject(soundsPath + 'red.wav', 'red');
-                    
-                    return colors;
-                }
-                */
-               
-                // Returns a Media Object with error messaging
-                // Can use .play() and other Meda functions
-                // *param 'relSoundPath' is the relative path to the sound file to play.
-                /*
-                function createNewSoundObject(relSoundPath, assetName) {
-
-                    // Preload the audio asset for later use
-                    return new Media(relSoundPath,
-                        // Success
-                        function() {  
-							$("#yellow").text("success");  
-							$("#" + assetName).removeClass("active");
-                            $(document).trigger("touchstart");                            
-                        },
-                        // Error
-                        function(e) { 
-                            //alert(relSoundPath);
-                            var str = JSON.stringify(e, undefined,  2);                             
-                        }
-                    );                    
-                }
-                */
-				
-				function playBoxHovers(e) {
-				
-					var touchedIds = [];
-					var touches = e.originalEvent.touches;
-										
-					for(var x = 0; x < touches.length; x++) {
-						var touch = e.originalEvent.touches[x];
-						var $el = $(document.elementFromPoint(touch.clientX, touch.clientY));
-						
-						$("#green").text(touch.clientX);
-						
-						touchedIds[x] = $el.attr("id");
-					}
-					
-					BUTTONS.each(function() {
-						var id = $(this).attr("id");
-						var isHovered = touchedIds.indexOf(id) != -1;
-						
-						$("#red").text(touchedIds[0] + " " + isHovered);
-						
-						if(isHovered) {
-							//alert(isHovered);
-							$("#blue").text($(this).hasClass("active"));
-							
-							if(!$(this).hasClass("active")) {
-								$(this).addClass("active");
-								colors[id].play();								
-							}
-							
-						}
-						else {
-							// $("#blue").text(id + " " + this).hasClass("active"));
-							$(this).removeClass("active");
-							colors[id].stop();
-						}										
-					});								
-				}
 
                 function onDeviceReady () {                            
                     
@@ -197,14 +77,13 @@ window.SwfController = {
     
     show: function () {
     
-         // Fetch a value from query parameters ?id=x
-         var showId = steroids.view.params["id"];
-         steroids.view.navigationBar.show("swf #" + showId);
-         
-         // Just to demonstrate the control flow of the application, hook your own code here
-         document.addEventListener("DOMContentLoaded", function() {
-           document.getElementById("show-id").textContent = showId;
-         });
+        document.addEventListener("deviceready",onShowDeviceReady,false);
+
+        function onShowDeviceReady () {                            
+            // Fetch a value from query parameters ?id=x
+            var showId = steroids.view.params["id"];
+            steroids.view.navigationBar.show('How To Play');
+        }
     
     }
 

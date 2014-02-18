@@ -26,11 +26,11 @@ input {
 
 .button {
     color:#fff;
-    opacity:0.65;
+    opacity: 0.65;
 }
 
 .button.active {
-    opacity:0.85;
+    opacity: 1;
 }
 
 

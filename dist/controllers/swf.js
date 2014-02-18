@@ -6,9 +6,26 @@ window.SwfController = {
     },
     
     game: function() {
-        steroids.view.navigationBar.show("Game");
+        steroids.view.navigationBar.show("");
+        
+        
+        var startButton = new steroids.buttons.NavigationBarButton();
+        startButton.title = "Play";
+        
+        startButton.onTap = function() {   
+            // Build up the sequence to use
+            self.totalSteps = $("#TotalSteps").val();
+            mcp.initGameSequence();
+            
+            mcp.startGame();    
+        }; 
+
+        steroids.view.navigationBar.setButtons({
+            right: [startButton]
+        });
                 
-        steroids.on('ready', function() {
+        
+        //steroids.on('ready', function() {
             
             document.addEventListener("touchmove", function(e) { 
                 // Disable user scrolling
@@ -18,11 +35,6 @@ window.SwfController = {
             });
             
             document.addEventListener("deviceready",onDeviceReady,false);
-            
-                // Helper console log method
-                function logJson(e) {
-                    var str = JSON.stringify(e, undefined, 2);                    
-                }
             
                 // Should return /www root
                 function getSteroidsAbsPath() {
@@ -59,6 +71,7 @@ window.SwfController = {
                 }
                      
                 // Setup buttons with colors / sounds
+                /*
                 function assignColorsToSounds(fullSoundPath) {
 					BUTTONS = $(".button");
                     colors = [
@@ -80,10 +93,12 @@ window.SwfController = {
                     
                     return colors;
                 }
+                */
                
                 // Returns a Media Object with error messaging
                 // Can use .play() and other Meda functions
                 // *param 'relSoundPath' is the relative path to the sound file to play.
+                /*
                 function createNewSoundObject(relSoundPath, assetName) {
 
                     // Preload the audio asset for later use
@@ -101,6 +116,7 @@ window.SwfController = {
                         }
                     );                    
                 }
+                */
 				
 				function playBoxHovers(e) {
 				
@@ -142,8 +158,20 @@ window.SwfController = {
 
                 function onDeviceReady () {                            
                     
-                    var colors = assignColorsToSounds();                
+                    mcp = new mcp_class();
+                    console.log('created the mcp class object');
                     
+                    mcp.initGameEvents();
+                    console.log('initialized game events');
+                    
+                    mcp.initGameSequence();
+                    console.log('initialized game sequence');
+                    
+                    var colors = mcp.assignColorsToSounds();                
+                    console.log('assigned colors to sounds');
+                    
+        
+                    /*
                     $(document).on('touchstart', '.sequence-container .button', function(e) {
                         playBoxHovers(e);                                                                  
                     });
@@ -156,9 +184,10 @@ window.SwfController = {
                     // I think we may need to bind coordinates to stop playing here as well
                     $(document).on('touchend', '.sequence-container .button', function(e) {
                         playBoxHovers(e);
-                    });           
+                    });     
+                    */      
                 }
-        }); // End steroids ready
+        //}); // End steroids ready
 
         $(document).ready(function(){
             

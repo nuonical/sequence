@@ -38,6 +38,10 @@ window.SwfController = {
 
                 function onDeviceReady () {                            
                     
+                    $('#replayBtn').click(function(){
+                        $('.lostModal').addClass('hider');
+                    });
+                    
                     mcp = new mcp_class();
                     console.log('created the mcp class object');
                     

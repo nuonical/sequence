@@ -28,7 +28,7 @@ mcp_class.prototype.initControls = function () {
         
             // If computer is showing the sequence to play, don't do anything
             if(self.computerIsShowing) {
-              return;
+                return;
             }
             
             var clickId = parseInt($(this).attr("data-id"));
@@ -39,27 +39,28 @@ mcp_class.prototype.initControls = function () {
             var index = self.UserInput.length -1;
             if(self.UserInput[index] != self.sequence[index]) {
               
-              // End Game
-              self.UserInput = [];
-              alert("You lose!");
-              self.gameInSession = false;
-              return false;
+                // End Game
+                self.UserInput = [];
+                //alert("You lose!");
+                $('.lostModal').removeClass('hider');
+                self.gameInSession = false;
+                return false;
             }
             
             // Check if the user has beaten the game
             if(self.UserInput.length == self.sequence.length) {
-              alert("Congratulations! You Won!!!");
-              self.UserInput = [];
-              self.gameInSession = false;
-              return;
+                alert("Congratulations! You Won!!!");
+                self.UserInput = [];
+                self.gameInSession = false;
+                return;
             }
             
             // If we hit the last step, continue on to the next one       
             if(self.UserInput.length -1 == self.currentStep - 1) {
-              self.currentStep++;
-              self.UserInput = [];
+                self.currentStep++;
+                self.UserInput = [];
               
-              return self.playSequence(self.currentStep);
+                return self.playSequence(self.currentStep);
             }
         }      
     });  
@@ -162,15 +163,22 @@ mcp_class.prototype.assignColorsToSounds = function (fullSoundPath) {
         'red'   
     ];                                       
     
-    var soundsPath = this.pathHelpers.getSoundsPathByDevice();
+    // pass in true for test
+    var test = false;
+    var soundsPath = this.pathHelpers.getSoundsPathByDevice(test);
     
-    this.colors['green'] = this.createNewSoundObject(soundsPath + 'green.wav', 'green');
-    
-    this.colors['yellow'] = this.createNewSoundObject(soundsPath + 'yellow.wav', 'yellow');
-    
-    this.colors['blue'] = this.createNewSoundObject(soundsPath + 'blue.wav', 'blue');
-    
-    this.colors['red'] = this.createNewSoundObject(soundsPath + 'red.wav', 'red');
+    if(test){
+        // Test sounds
+        this.colors['green'] = this.createNewSoundObject(soundsPath + 'whahappened.wav', 'green');
+        this.colors['yellow'] = this.createNewSoundObject(soundsPath + 'whipout.wav', 'yellow');
+        this.colors['blue'] = this.createNewSoundObject(soundsPath + 'whitewomen.wav', 'blue');
+        this.colors['red'] = this.createNewSoundObject(soundsPath + 'abides.wav', 'red');
+    } else {
+        this.colors['green'] = this.createNewSoundObject(soundsPath + 'green.wav', 'green');
+        this.colors['yellow'] = this.createNewSoundObject(soundsPath + 'yellow.wav', 'yellow');
+        this.colors['blue'] = this.createNewSoundObject(soundsPath + 'blue.wav', 'blue');
+        this.colors['red'] = this.createNewSoundObject(soundsPath + 'red.wav', 'red');
+    }
 
 }
 
@@ -241,6 +249,17 @@ mcp_class.prototype.pathHelpers = {
         return '/sounds/sequence/';
     },
      
+    // test paths
+    // Return ios test sounds path               
+    getIosTestSoundsPath: function () {
+        return window.location.origin + "/sounds/";
+    },
+    
+    // Return android test sounds path
+    getAndroidTestSoundsPath: function () {
+        return "file://" + steroids.app.absolutePath + '/sounds/';
+    },
+     
     // Return ios sounds path               
     getIosSoundsPath: function () {
         return window.location.origin + "/sounds/sequence/";
@@ -252,11 +271,17 @@ mcp_class.prototype.pathHelpers = {
     },
     
     // Device checking to grab correct file locations
-    getSoundsPathByDevice: function () {
+    getSoundsPathByDevice: function (test) {
         var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
         if(iOS) {
+            if(test){
+                return this.getIosTestSoundsPath();
+            }
             return this.getIosSoundsPath();
         } else {
+            if(test){
+                return this.getAndroidTestSoundsPath();
+            }
             return this.getAndroidSoundsPath();
         }
     }

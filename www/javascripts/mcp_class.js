@@ -71,6 +71,7 @@ mcp_class.prototype.playSequence = function (iStep) {
     var self = this;
     iStep = Number(iStep);
     var i = Number(0);
+    var delay = 500;
     
     // Play up to where the user is
     self.computerIsShowing = true;
@@ -88,13 +89,15 @@ mcp_class.prototype.playSequence = function (iStep) {
             $('.button[data-id="' + self.sequence[self.counter] + '"]').addClass("active");
             self.colors[$('.button[data-id="' + self.sequence[self.counter] + '"]').attr('id')].play();
             
-            var $el = $('.button[data-id="' + self.sequence[self.counter] + '"]');
-                  
-            // Unactivate the box in x ms
-            setTimeout(function() {
+            // Stop so we don't overlap sounds, Unactivate the box in x ms
+            setTimeout(function () {
+                self.colors[$('.button[data-id="' + self.sequence[self.counter] + '"]').attr('id')].stop();
                 $el.removeClass("active");
                 self.counter++;
-            }, 500);
+            }, delay);
+            
+            
+            var $el = $('.button[data-id="' + self.sequence[self.counter] + '"]');
                         
             // Continue playing sequence
             if (--i) {
@@ -105,7 +108,7 @@ mcp_class.prototype.playSequence = function (iStep) {
                 self.computerIsShowing = false;
             }
             
-        }, 1000);
+        }, delay);
         
     })(iStep);   
             

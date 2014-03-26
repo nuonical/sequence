@@ -36,41 +36,42 @@ window.SwfController = {
             
             document.addEventListener("deviceready",onDeviceReady,false);
 
-                function onDeviceReady () {                            
-                    
-                    $('#replayBtn').click(function(){
-                        $('.lostModal').addClass('hider');
-                    });
-                    
-                    mcp = new mcp_class();
-                    console.log('created the mcp class object');
-                    
-                    mcp.initGameEvents();
-                    console.log('initialized game events');
-                    
-                    mcp.initGameSequence();
-                    console.log('initialized game sequence');
-                    
-                    var colors = mcp.assignColorsToSounds();                
-                    console.log('assigned colors to sounds');
-                    
+            function onDeviceReady () {                            
+                
+                $('#replayBtn').click(function(){
+                    $('.lostModal').addClass('hider');
+                });
+                
+                mcp = new mcp_class();
+                console.log('created the mcp class object');
+                
+                mcp.initGameEvents();
+                console.log('initialized game events');
+                
+                mcp.initGameSequence();
+                console.log('initialized game sequence');
+                
+                var colors = mcp.assignColorsToSounds();                
+                console.log('assigned colors to sounds');
+                
         
-                    /*
-                    $(document).on('touchstart', '.sequence-container .button', function(e) {
-                        playBoxHovers(e);                                                                  
-                    });
+                /*
+                $(document).on('touchstart', '.sequence-container .button', function(e) {
+                    playBoxHovers(e);                                                                  
+                });
 
-                    // Add touchmove listener, check coords
-                    $(document).on('touchmove', '.sequence-container .button', function(e) {
-                        playBoxHovers(e);                        
-                    });
-                    
-                    // I think we may need to bind coordinates to stop playing here as well
-                    $(document).on('touchend', '.sequence-container .button', function(e) {
-                        playBoxHovers(e);
-                    });     
-                    */      
-                }
+                // Add touchmove listener, check coords
+                $(document).on('touchmove', '.sequence-container .button', function(e) {
+                    playBoxHovers(e);                        
+                });
+                
+                // I think we may need to bind coordinates to stop playing here as well
+                $(document).on('touchend', '.sequence-container .button', function(e) {
+                    playBoxHovers(e);
+                });     
+                */      
+            }
+            
         //}); // End steroids ready
 
         $(document).ready(function(){

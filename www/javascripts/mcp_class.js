@@ -82,21 +82,19 @@ mcp_class.prototype.playSequence = function (iStep) {
 
         setTimeout(function () {  
             // Make the box active
-            console.log('This is the color of the button: ' +
-                $('.button[data-id="' + self.sequence[self.counter] + '"]').attr('data-sound')
-            );
-            
             $('.button[data-id="' + self.sequence[self.counter] + '"]').addClass("active");
+            
+            // play the sound
             self.colors[$('.button[data-id="' + self.sequence[self.counter] + '"]').attr('id')].play();
             
-            // Stop so we don't overlap sounds, Unactivate the box in x ms
+            // Stop so we don't overlap sounds, Deactivate the box in x ms
             setTimeout(function () {
                 self.colors[$('.button[data-id="' + self.sequence[self.counter] + '"]').attr('id')].stop();
                 $el.removeClass("active");
                 self.counter++;
             }, delay);
             
-            
+            // show the count of how many turns they've taken
             var $el = $('.button[data-id="' + self.sequence[self.counter] + '"]');
                         
             // Continue playing sequence
@@ -112,6 +110,7 @@ mcp_class.prototype.playSequence = function (iStep) {
         
     })(iStep);   
             
+    // the computer is finished playing back the sequence
     self.computerIsShowing = false;   
          
 };
@@ -224,12 +223,14 @@ mcp_class.prototype.playBoxHovers = function (e) {
     	var id = $(this).attr("id");
     	var isHovered = touchedIds.indexOf(id) != -1;
     	
+    	// play the sound for this button
     	if(isHovered) {
     		if(!$(this).hasClass("active")) {
     			$(this).addClass("active");
     			self.colors[id].play();								
     		}
     	}
+    	// stop playing the sound
     	else {
     		$(this).removeClass("active");
     		self.colors[id].stop();
@@ -289,11 +290,3 @@ mcp_class.prototype.pathHelpers = {
         }
     }
 };
-
-
-
-// Keep at the bottom
-$(document).ready(function () {
-    //mcp = new mcp_class();
-    //mcp.initGameEvents();
-});
